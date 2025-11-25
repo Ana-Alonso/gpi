@@ -18,8 +18,17 @@ jobs:
           cache: 'maven'
 
       - name: Build, Test & Lint
-        # Ejecuta los tests y checkstyle
-        run: mvn clean verify -B
+        # AQUÍ ESTÁ EL TRUCO: Pasamos la configuración de H2 y el Issuer "fake" por línea de comandos.
+        # Esto anula la configuración de tu application.properties que busca MySQL.
+        run: >
+          mvn clean verify -B
+          -Dspring.datasource.url="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+          -Dspring.datasource.driver-class-name="org.h2.Driver"
+          -Dspring.datasource.username="sa"
+          -Dspring.datasource.password="password"
+          -Dspring.jpa.database-platform="org.hibernate.dialect.H2Dialect"
+          -Dspring.jpa.hibernate.ddl-auto="create-drop"
+          -Dspring.security.oauth2.resourceserver.jwt.issuer-uri="https://accounts.google.com"
 
       - name: Upload Coverage Report
         if: always()
@@ -46,9 +55,5 @@ jobs:
       - name: Install & Verify
         run: |
           npm ci
-          # HE COMENTADO EL LINT PORQUE AÚN NO LO TIENES CONFIGURADO
-          # npm run lint
-          # npx prettier --check .
-          
-          # En su lugar, comprobamos que el proyecto compila correctamente:
+          # Como no tienes linter configurado, probamos solo la compilación:
           npm run build -- --configuration development
