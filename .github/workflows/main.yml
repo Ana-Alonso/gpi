@@ -6,7 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        # CORRECCIÓN 1: Apuntamos a la carpeta correcta del backend
         working-directory: ./resource-server
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +18,7 @@ jobs:
           cache: 'maven'
 
       - name: Build, Test & Lint
-        # Esto ejecutará el pom.xml que está dentro de resource-server
+        # Ejecuta los tests y checkstyle
         run: mvn clean verify -B
 
       - name: Upload Coverage Report
@@ -27,14 +26,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-report-backend
-          # CORRECCIÓN 2: La ruta del reporte también cambia
           path: resource-server/target/site/jacoco/
 
   frontend-check:
     runs-on: ubuntu-latest
     defaults:
       run:
-        # CORRECCIÓN 3: Tu frontend se llama 'ag-prueba-front', no 'frontend'
         working-directory: ./ag-prueba-front
     steps:
       - uses: actions/checkout@v4
@@ -44,12 +41,14 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          # CORRECCIÓN 4: Ruta exacta al lockfile para el caché
           cache-dependency-path: ag-prueba-front/package-lock.json
 
-      - name: Install & Lint
+      - name: Install & Verify
         run: |
           npm ci
-          npm run lint
-          # Si tienes prettier configurado, descomenta la siguiente línea:
+          # HE COMENTADO EL LINT PORQUE AÚN NO LO TIENES CONFIGURADO
+          # npm run lint
           # npx prettier --check .
+          
+          # En su lugar, comprobamos que el proyecto compila correctamente:
+          npm run build -- --configuration development
