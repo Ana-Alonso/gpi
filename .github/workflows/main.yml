@@ -4,47 +4,52 @@ on: [push, pull_request]
 jobs:
   backend-check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        # CORRECCIÓN 1: Apuntamos a la carpeta correcta del backend
+        working-directory: ./resource-server
     steps:
-      - uses: actions/checkout@v4 # Actualizado a v4
-      
+      - uses: actions/checkout@v4
+
       - name: Setup Java 17
-        uses: actions/setup-java@v4 # Actualizado a v4
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
 
       - name: Build, Test & Lint
+        # Esto ejecutará el pom.xml que está dentro de resource-server
         run: mvn clean verify -B
 
       - name: Upload Coverage Report
         if: always()
-        # CORRECCIÓN CRÍTICA: v3 -> v4
-        uses: actions/upload-artifact@v4 
+        uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
-          # Nota: En v4 es mejor subir el directorio completo si quieres ver los estilos css del reporte
-          path: target/site/jacoco/ 
+          name: jacoco-report-backend
+          # CORRECCIÓN 2: La ruta del reporte también cambia
+          path: resource-server/target/site/jacoco/
 
   frontend-check:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./frontend
+        # CORRECCIÓN 3: Tu frontend se llama 'ag-prueba-front', no 'frontend'
+        working-directory: ./ag-prueba-front
     steps:
-      - uses: actions/checkout@v4 # Actualizado a v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v4 # Actualizado a v4
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-          # IMPORTANTE: Asegúrate de que este archivo existe en tu repo. 
-          # Si no usas package-lock.json, comenta la siguiente línea.
-          cache-dependency-path: frontend/package-lock.json 
+          # CORRECCIÓN 4: Ruta exacta al lockfile para el caché
+          cache-dependency-path: ag-prueba-front/package-lock.json
 
       - name: Install & Lint
         run: |
           npm ci
           npm run lint
-          npx prettier --check .
+          # Si tienes prettier configurado, descomenta la siguiente línea:
+          # npx prettier --check .
