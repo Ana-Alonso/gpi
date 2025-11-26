@@ -18,7 +18,6 @@ jobs:
           cache: 'maven'
 
       - name: Build, Test & Lint
-        # Ejecuta verify, que dispara checkstyle y ahora también el quality gate de jacoco
         run: mvn clean verify -B
 
       - name: Upload Coverage Report
@@ -45,13 +44,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
+        
+      - name: Linter
+        run: npm run lint
 
       - name: Security Audit (SCA)
-        # Esto valida el OKR de seguridad. 
-        # Si quieres que falle solo con vulnerabilidades críticas:
         run: npm audit --audit-level=critical
-        # Si prefieres que NO bloquee el pipeline aunque encuentre fallos (solo informar):
-        # run: npm audit || true
 
       - name: Verify Build
         run: npm run build -- --configuration development
