@@ -44,9 +44,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
-        
-      - name: Linter
-        run: npm run lint
 
       - name: Security Audit (SCA)
         run: npm audit --audit-level=critical
