@@ -18,8 +18,7 @@ jobs:
           cache: 'maven'
 
       - name: Build, Test & Lint
-        # Al tener el application.properties en src/test/resources, 
-        # ya no necesitamos variables de entorno complejas aquí.
+        # Ejecuta verify, que dispara checkstyle y ahora también el quality gate de jacoco
         run: mvn clean verify -B
 
       - name: Upload Coverage Report
@@ -44,11 +43,15 @@ jobs:
           cache: 'npm'
           cache-dependency-path: ag-prueba-front/package-lock.json
 
-      - name: Install & Verify
-        run: |
-          npm ci
-          # Como no tienes linter configurado, probamos solo la compilación:
-          # npm run lint
-          
-          # En su lugar, comprobamos que el proyecto compila correctamente:
-          npm run build -- --configuration development
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Security Audit (SCA)
+        # Esto valida el OKR de seguridad. 
+        # Si quieres que falle solo con vulnerabilidades críticas:
+        run: npm audit --audit-level=critical
+        # Si prefieres que NO bloquee el pipeline aunque encuentre fallos (solo informar):
+        # run: npm audit || true
+
+      - name: Verify Build
+        run: npm run build -- --configuration development
