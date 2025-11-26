@@ -31,7 +31,8 @@ public class ResourceServerConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles"); // roles viene de tokenCustomizer de authserver getClaims
+        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles"); 
+        // roles viene de tokenCustomizer de authserver getClaims
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
