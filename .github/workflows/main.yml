@@ -18,7 +18,17 @@ jobs:
           cache: 'maven'
 
       - name: Build, Test & Lint
-        # Ejecuta los tests y checkstyle
+        # SOLUCIÓN: Usamos variables de entorno para configurar la BD en memoria (H2).
+        # Esto evita errores de comillas y asegura que Spring Boot coja la configuración.
+        env:
+          SPRING_DATASOURCE_URL: "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.h2.Driver"
+          SPRING_DATASOURCE_USERNAME: "sa"
+          SPRING_DATASOURCE_PASSWORD: "password"
+          SPRING_JPA_DATABASE_PLATFORM: "org.hibernate.dialect.H2Dialect"
+          SPRING_JPA_HIBERNATE_DDL_AUTO: "create-drop"
+          # Usamos Google como issuer para que no falle intentando conectar a localhost:9000
+          SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: "https://accounts.google.com"
         run: mvn clean verify -B
 
       - name: Upload Coverage Report
@@ -46,9 +56,8 @@ jobs:
       - name: Install & Verify
         run: |
           npm ci
-          # HE COMENTADO EL LINT PORQUE AÚN NO LO TIENES CONFIGURADO
+          # Como no tienes el script 'lint' configurado en package.json, lo comentamos
           # npm run lint
-          # npx prettier --check .
           
-          # En su lugar, comprobamos que el proyecto compila correctamente:
+          # En su lugar, verificamos que el proyecto compila correctamente sin errores
           npm run build -- --configuration development
