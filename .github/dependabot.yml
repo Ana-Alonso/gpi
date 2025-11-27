@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Configuración para el Resource Server (Backend 1)
+  - package-ecosystem: "maven"
+    directory: "/resource-server"
+    schedule:
+      interval: "daily"
+
+  # Configuración para el Authorization Server (Backend 2)
+  - package-ecosystem: "maven"
+    directory: "/authorization-server"
+    schedule:
+      interval: "daily"
+
+  # Configuración para el Frontend
+  - package-ecosystem: "npm"
+    directory: "/ag-prueba-front"
+    schedule:
+      interval: "daily"
