@@ -29,6 +29,7 @@ export class MenuComponent implements OnInit {
     response_type: environment.response_type,
     response_mode: environment.response_mode,
     code_challenge_method: environment.code_challenge_method,
+    code_challenge: '',
   };
 
   ngOnInit(): void {
