@@ -1,26 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ResourceService } from '../../services/resource.service';
-
 @Component({
   selector: 'app-admin',
   standalone: true,
   imports: [],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  styleUrl: './admin.component.scss',
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
+  private resourceService = inject(ResourceService);
+
   message = '';
 
-  constructor(
-    private resourceService: ResourceService
-  ) { }
-
   ngOnInit(): void {
-    this.resourceService.admin().subscribe(data => {
-      this.message = data.message;
-    },
-      err => {
+    this.resourceService.admin().subscribe(
+      (data) => {
+        this.message = data.message;
+      },
+      (err) => {
         console.log(err);
-      });
+      }
+    );
   }
 }

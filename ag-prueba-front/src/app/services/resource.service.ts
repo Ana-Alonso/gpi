@@ -1,23 +1,22 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { MessageDto } from '../interfaces/dtos';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ResourceService {
+  private httpClient = inject(HttpClient);
 
   resourceUrl = environment.resource_url;
 
-  constructor(private httpClient: HttpClient) { }
-
-  public user(): Observable<any> {
-    return this.httpClient.get<any>(this.resourceUrl + 'user');
+  public user(): Observable<MessageDto> {
+    return this.httpClient.get<MessageDto>(this.resourceUrl + 'user');
   }
 
-  public admin(): Observable<any> {
-    return this.httpClient.get<any>(this.resourceUrl + 'admin');
+  public admin(): Observable<MessageDto> {
+    return this.httpClient.get<MessageDto>(this.resourceUrl + 'admin');
   }
-
 }
