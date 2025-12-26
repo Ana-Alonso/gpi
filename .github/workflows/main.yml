@@ -49,7 +49,12 @@ jobs:
         run: npm run lint
 
       - name: Security Audit (SCA)
-        run: npm audit --audit-level=critical
+        run: npm audit --audit-level=high
 
       - name: Verify Build
-        run: npm run build -- --configuration development
+        run: npm run build -- --configuration development  
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
