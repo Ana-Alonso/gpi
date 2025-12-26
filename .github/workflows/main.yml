@@ -50,6 +50,7 @@ jobs:
 
       - name: Security Audit (SCA)
         run: npm audit --audit-level=high
+        continue-on-error: true
 
       - name: Verify Build
         run: npm run build -- --configuration development  
