@@ -31,10 +31,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: sbom-backend
-          path: |
-            resource-server/target/bom.json
-            resource-server/target/bom.xml
+          name: sbom-backend-json
+          # Ruta exacta según tu log de Maven
+          path: resource-server/target/classes/META-INF/sbom/application.cdx.json
+            
       - name: Snyk Backend Scan
         run: |
             npm install -g snyk
