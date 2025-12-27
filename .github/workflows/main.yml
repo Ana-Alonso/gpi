@@ -68,5 +68,3 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --file=ag-prueba-front/package.json
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
