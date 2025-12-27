@@ -29,7 +29,6 @@ jobs:
 
       - name: Snyk Backend Scan
         run: |
-            cd resource-server
             npm install -g snyk
             snyk test --file=pom.xml
         env:
@@ -68,4 +67,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-            args: --file=ag-prueba-front/package.json
+          args: --file=ag-prueba-front/package.json
