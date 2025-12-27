@@ -27,12 +27,13 @@ jobs:
           name: jacoco-report-backend
           path: resource-server/target/site/jacoco/
 
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
+      - name: Snyk Backend Scan
+        run: |
+            cd resource-server
+            npm install -g snyk
+            snyk test --file=pom.xml
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --file=resource-server/pom.xml
 
   frontend-check:
     runs-on: ubuntu-latest
@@ -67,4 +68,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --file=ag-prueba-front/package.json
+            args: --file=ag-prueba-front/package.json
