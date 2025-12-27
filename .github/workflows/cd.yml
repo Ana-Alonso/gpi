@@ -31,7 +31,7 @@ jobs:
           cd resource-server
           mvn deploy -DskipTests
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       - name: Deploy to Staging (Simulated)
         run: |
           echo "Desplegando Resource Server en entorno de pruebas..."
