@@ -34,7 +34,7 @@ jobs:
           # 3. SETTINGS FLAG: Forzamos a Maven a usar el archivo de configuración generado arriba
           mvn deploy -DskipTests --settings ../settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
       - name: Deploy to Staging (Simulated)
         run: |
