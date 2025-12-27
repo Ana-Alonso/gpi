@@ -26,8 +26,12 @@ jobs:
         run: |
           cd resource-server
           mvn clean package -DskipTests
-        # Usamos skipTests porque ya pasaron exitosamente en el Quality Gate
-
+      - name: Publish Binary to GitHub Packages
+        run: |
+          cd resource-server
+          mvn deploy -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to Staging (Simulated)
         run: |
           echo "Desplegando Resource Server en entorno de pruebas..."
