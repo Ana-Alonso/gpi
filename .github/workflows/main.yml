@@ -26,7 +26,12 @@ jobs:
         with:
           name: jacoco-report-backend
           path: resource-server/target/site/jacoco/
-
+      - name: Upload SBOM Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: sbom-backend-json
+            path: resource-server/target/bom.json
       - name: Snyk Backend Scan
         run: |
             npm install -g snyk
