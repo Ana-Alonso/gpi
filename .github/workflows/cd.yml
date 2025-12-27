@@ -2,16 +2,20 @@ name: Continuous Deployment (OKR 2)
 
 on:
   workflow_run:
-    workflows: ["Quality Gate POC"] # Se dispara al terminar el workflow de la Entrega 1
+    workflows: ["Quality Gate POC"] 
     types:
       - completed
     branches:
-      - develop
+      - develop 
 
 jobs:
   deploy-backend:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write 
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -21,25 +25,23 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          server-id: github 
+          settings-path: ${{ github.workspace }} 
 
-      - name: Build Production Artifact
-        run: |
-          cd resource-server
-          mvn clean package -DskipTests
       - name: Publish Binary to GitHub Packages
         run: |
           cd resource-server
-          mvn deploy -DskipTests
+          # 3. SETTINGS FLAG: Forzamos a Maven a usar el archivo de configuración generado arriba
+          mvn deploy -DskipTests --settings ../settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }} 
+
       - name: Deploy to Staging (Simulated)
         run: |
           echo "Desplegando Resource Server en entorno de pruebas..."
-          # Aquí irían comandos reales como: 
-          # gcloud app deploy o docker push
           echo "Estado del sistema: [OK]"
         env:
-          DB_URL: ${{ secrets.DB_URL }} # Fuente única de verdad
+          DB_URL: ${{ secrets.DB_URL }}
 
   deploy-frontend:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
