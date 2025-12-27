@@ -5,8 +5,8 @@ on:
     workflows: ["Quality Gate POC"] # Se dispara al terminar el workflow de la Entrega 1
     types:
       - completed
-    #branches:
-     # - main
+    branches:
+      - develop
 
 jobs:
   deploy-backend:
