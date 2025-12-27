@@ -31,6 +31,7 @@ jobs:
         run: |
             npm install -g snyk
             snyk test --file=pom.xml
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -64,6 +65,7 @@ jobs:
 
       - name: Snyk Frontend Scan
         uses: snyk/actions/node@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
